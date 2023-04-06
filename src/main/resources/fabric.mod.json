@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "zombie-jerky",
+	"version": "${version}",
+	"name": "Zombie Jerky",
+	"description": "Create Zombie Jerky in a smoker using rotten flesh!",
+	"authors": [
+		"Kestalkayden"
+	],
+	"contact": {
+		"homepage": "https://github.com/kestalkayden/zombie-jerky",
+		"sources": "https://github.com/kestalkayden/zombie-jerky"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/zombie-jerky/icon.png",
+	"environment": "*",
+	"entrypoints": {
+	  "main": [{
+		  "value": "com.zombie.jerky.ZombieJerky"
+		}
+	  ]
+	},
+	"depends": {
+		"fabricloader": ">=0.14.17",
+		"fabric": "*",
+		"minecraft": [
+		  "1.19.3",
+		  "1.19.4",
+		  "1.20.*"
+		],
+		"java": ">=17"
+	  },
+	"suggests": {
+		"another-mod": "*"
+	}
+}
