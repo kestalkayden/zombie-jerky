@@ -22,7 +22,7 @@ public class ZombieJerky implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Zombie Jerky Mod Initialized");
 
-		Registry.register(Registries.ITEM, new Identifier(MOD_ID, "zombie_jerky"), ZOMBIE_JERKY_ITEM);
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "zombie_jerky"), ZOMBIE_JERKY_ITEM);
 		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK).register(entries -> entries.add(ZOMBIE_JERKY_ITEM));
 		
 	}
