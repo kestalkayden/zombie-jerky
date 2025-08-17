@@ -1,0 +1,38 @@
+package com.zombie.jerky;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.util.Identifier;
+import net.minecraft.registry.Registry;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroups;
+import net.minecraft.registry.Registries;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.FoodComponent;
+
+public class ZombieJerky implements ModInitializer {
+	public static final String MOD_ID = "zombie-jerky";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+	public static final Item ZOMBIE_JERKY_ITEM = new Item(
+			new Item.Settings().component(
+					DataComponentTypes.FOOD,
+					new FoodComponent.Builder()
+							.nutrition(1)
+							.saturationModifier(0.5f)
+							.alwaysEdible()
+							.eatSeconds(0.8f) // fast eating, replaces old .snack()
+							.build()
+			)
+	);
+
+	@Override
+	public void onInitialize() {
+		LOGGER.info("Zombie Jerky Mod Initialized");
+		Registry.register(Registries.ITEM, Identifier.of(MOD_ID, "zombie_jerky"), ZOMBIE_JERKY_ITEM);
+		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK)
+				.register(entries -> entries.add(ZOMBIE_JERKY_ITEM));
+	}
+}
