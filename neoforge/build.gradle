@@ -1,0 +1,75 @@
+plugins {
+    id 'net.neoforged.moddev' version '2.0.53-beta'
+    id 'maven-publish'
+}
+
+base.archivesName = "${project.archives_base_name}-neoforge"
+
+neoForge {
+    version = neoforge_version
+    validateAccessTransformers = false
+    
+    mods {
+        zombiejerky {
+            sourceSet sourceSets.main
+        }
+    }
+    
+    runs {
+        client { 
+            client()
+        }
+        server { 
+            server()
+        }
+        data { 
+            data()
+        }
+    }
+}
+
+dependencies {
+    implementation "net.neoforged:neoforge:${neoforge_version}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+}
+
+processResources {
+    inputs.property "version", project.version
+    
+    // Copy shared assets (following candy-dispenser pattern)
+    from('../shared-resources/assets/zombie_jerky') {
+        into 'assets/zombie_jerky'
+    }
+    from('../shared-resources/data/zombie_jerky') {
+        into 'data/zombie_jerky'
+    }
+    from('../shared-resources/pack.mcmeta') {
+        // Copy pack.mcmeta to root
+    }
+    
+    filesMatching("**/neoforge.mods.toml") {
+        expand "version": project.version
+    }
+}
+
+java {
+    withSourcesJar()
+}
+
+jar {
+    from("../LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
+}
+
+// configure the maven publication
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+}
