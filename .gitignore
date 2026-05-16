@@ -43,3 +43,7 @@ replay_*.log
 
 # docs
 docs/
+
+# AI assistant files (local, not committed)
+CLAUDE.md
+.claude/

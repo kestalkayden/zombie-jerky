@@ -1,22 +1,17 @@
 package com.zombie.jerky;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ConsumableComponent;
-import net.minecraft.component.type.FoodComponent;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.consume.UseAction;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Identifier;
-
-import java.util.List;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,34 +26,24 @@ public class ZombieJerky implements ModInitializer {
 	public void onInitialize() {
 		LOGGER.info("Initializing Zombie Jerky");
 
-		// Create the registry key and settings
-		Identifier itemId = Identifier.of(MOD_ID, "zombie_jerky");
-		RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, itemId);
-		
-		Item.Settings settings = new Item.Settings()
-				.registryKey(itemKey)
-				.component(DataComponentTypes.FOOD, new FoodComponent(
-						1,        // nutrition
-						0.5f,     // saturation
-						true      // always edible
-				))
-				.component(DataComponentTypes.CONSUMABLE,
-						new ConsumableComponent(
-								0.8f,                      // consumeSeconds: fast
-								UseAction.EAT,              // animation
-								SoundEvents.ENTITY_GENERIC_EAT, // RegistryEntry<SoundEvent>
-								true,                       // has consume particles
-								List.of()                   // no effects
-						)
-				);
+		Identifier itemId = Identifier.fromNamespaceAndPath(MOD_ID, "zombie_jerky");
+		ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, itemId);
+
+		Item.Properties properties = new Item.Properties()
+				.setId(itemKey)
+				.food(new FoodProperties.Builder()
+						.nutrition(1)
+						.saturationModifier(0.5f)
+						.alwaysEdible()
+						.build());
 
 		ZOMBIE_JERKY_ITEM = Registry.register(
-				Registries.ITEM,
+				BuiltInRegistries.ITEM,
 				itemId,
-				new Item(settings)
+				new Item(properties)
 		);
 
-		ItemGroupEvents.modifyEntriesEvent(ItemGroups.FOOD_AND_DRINK)
-				.register(entries -> entries.add(ZOMBIE_JERKY_ITEM));
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FOOD_AND_DRINKS)
+				.register(output -> output.accept(new ItemStack(ZOMBIE_JERKY_ITEM)));
 	}
 }

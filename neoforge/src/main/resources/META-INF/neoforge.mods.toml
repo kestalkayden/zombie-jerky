@@ -16,13 +16,13 @@ displayURL = "https://github.com/kestalkayden/zombie-jerky"
 [[dependencies.zombie_jerky]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.8,)"
+versionRange = "[26.1,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.zombie_jerky]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.8,1.22)"
+versionRange = "[26.1,26.2)"
 ordering = "NONE"
 side = "BOTH"
